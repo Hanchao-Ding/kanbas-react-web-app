@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { AiOutlineDashboard } from "react-icons/ai";
+import { AiOutlineMail } from "react-icons/ai";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
@@ -58,6 +59,14 @@ export default function KanbasNavigation() {
       >
         <IoCalendarOutline className="fs-1 text-danger" /><br />
         Calendar
+      </NavLink>
+      <NavLink
+        to="/Kanbas/inBox"
+        id="wd-settings-link"
+        className={({ isActive }) => `list-group-item text-center border-0 ${isActive ? 'bg-white text-danger' : 'bg-black text-white'}`}
+      >
+        <AiOutlineMail className="fs-1 text-danger" /><br />
+        inBoxs
       </NavLink>
       <NavLink
         to="/labs"
