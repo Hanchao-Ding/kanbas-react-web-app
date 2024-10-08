@@ -64,7 +64,7 @@ export default function ModulesControls() {
       <button id="wd-view-progress" className="btn btn-info float-end me-1">
         View Progress
       </button>
-      <button id="wd-collapse-all" className="btn btn-warning float-end">
+      <button id="wd-collapse-all" className="btn btn-warning float-end me-1">
         Collapse All
       </button>
     </div>
