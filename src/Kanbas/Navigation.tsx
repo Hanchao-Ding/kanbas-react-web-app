@@ -60,12 +60,12 @@ export default function KanbasNavigation() {
         Calendar
       </NavLink>
       <NavLink
-        to="/Kanbas/Settings"
+        to="/labs"
         id="wd-settings-link"
         className={({ isActive }) => `list-group-item text-center border-0 ${isActive ? 'bg-white text-danger' : 'bg-black text-white'}`}
       >
         <LiaCogSolid className="fs-1 text-danger" /><br />
-        Settings
+        Labs
       </NavLink>
     </div>
   );
