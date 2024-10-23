@@ -1,9 +1,13 @@
 import ModulesControls from "./ModulesControls";
 import LessonControlButtons from "./LessonControlButtons";
-import ModuleControlButtons from "./ModuelControlButtons";
+import ModuleControlButtons from "./ModuleControlButtons";
 import { BsGripVertical } from "react-icons/bs";
+import { useParams } from "react-router";
+import * as db from "../../Database";
 
 export default function Modules() {
+    const { cid } = useParams();
+    const modules = db.modules;
     return (
         <div>
         <ModulesControls /><br /><br /><br /><br />
@@ -40,7 +44,7 @@ export default function Modules() {
               <li className="wd-lesson list-group-item p-3 ps-1"> LESSON 2 </li>
             </ul>
           </li>
-        </ul> </div>
+      </ul> </div>
       
   );}
   
