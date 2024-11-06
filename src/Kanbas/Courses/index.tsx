@@ -1,6 +1,5 @@
 import CoursesNavigation from "./Navigation";
 import { FaAlignJustify } from 'react-icons/fa';
-import { courses } from "../Database"; // Assuming this imports the courses array
 import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
@@ -8,7 +7,7 @@ import AssignmentEditor from "./Assignments/Editor";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import PeopleTable from "./People/Table";
 
-export default function Courses() {
+export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams(); // Get the course ID from the URL
   const course = courses.find((course) => course._id === cid); // Find the course with the given ID
   const { pathname } = useLocation(); // Get the current URL path

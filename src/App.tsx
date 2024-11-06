@@ -4,10 +4,13 @@ import Labs from "./labs";
 import Kanbas from "./Kanbas";
 import './App.css';
 import './labs/lab2/index'
+import store from "./Kanbas/store";
+import { Provider } from "react-redux";
 
 function App() {
   return (
     <HashRouter>
+            <Provider store={store}>
       <div>
       <Routes>
           <Route path="/" element={<Navigate to="Kanbas/Dashboard" />} />
@@ -15,6 +18,7 @@ function App() {
           <Route path="/Kanbas/*" element={<Kanbas />} />
         </Routes>
       </div>
+      </Provider>
     </HashRouter>
   );
 }

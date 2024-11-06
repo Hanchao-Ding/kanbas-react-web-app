@@ -1,11 +1,22 @@
 import { MdSearch } from "react-icons/md"; // Importing the search icon
-import { useParams } from "react-router"; // Importing useParams to get course ID
+import { useNavigate, useParams } from "react-router"; // Importing useParams to get course ID
 import * as db from "../../Database"; // Importing the database
-import { assignments } from "../../Database";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAssignment, editAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams(); // Retrieve the course ID from the URL params
-  const assignments = db.assignments; // Get assignments from the database
+  const [assignments, setAssignments] = useState<any[]>(db.assignments);
+  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this assignment?")) {
+      dispatch(deleteAssignment(id));
+    }
+  };
 
   // Filter assignments based on the current course ID
   const filteredAssignments = assignments.filter(
@@ -14,6 +25,20 @@ export default function Assignments() {
 
   return (
     <div id="wd-assignments" className="p-3">
+            
+      <ul>
+        {assignments.map((assignment: any) => (
+          <li key={assignment._id}>
+            <span>{assignment.title}</span>
+            <button onClick={() => dispatch(editAssignment(assignment._id))}>
+              Edit
+            </button>
+            <button onClick={() => handleDelete(assignment._id)}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
       {/* Search bar and action buttons */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="input-group w-50">
@@ -31,7 +56,7 @@ export default function Assignments() {
           <button id="wd-add-assignment-group" className="btn btn-secondary me-2">
             + Group
           </button>
-          <button id="wd-add-assignment" className="btn btn-success">
+          <button onClick={() => navigate("/assignments/new")} id="wd-add-assignment" className="btn btn-success">
             + Assignment
           </button>
         </div>
