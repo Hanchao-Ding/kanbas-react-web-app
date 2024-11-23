@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import * as db from "./Database";
+
 import { useSelector, useDispatch  } from "react-redux";
 import { enroll, unenroll } from "./reducer";
 import { RootState } from "./store";
@@ -14,7 +14,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
 
 {
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
-  const [enrollments, setEnrollments] = useState({});
+
   const dispatch = useDispatch();
   const [showEnrollments, setShowEnrollments] = useState(false);
   return (
