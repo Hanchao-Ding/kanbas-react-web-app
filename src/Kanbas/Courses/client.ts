@@ -26,3 +26,11 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
   return response.data;
 };
 
+
+export function createAssignmentForCourse(arg0: string, assignment: any) {
+  throw new Error('Function not implemented.');
+}
+export function findAssignmentsForCourse(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

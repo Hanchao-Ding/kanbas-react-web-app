@@ -1,92 +1,153 @@
-import { MdSearch } from "react-icons/md"; // Importing the search icon
-import { useNavigate, useParams } from "react-router"; // Importing useParams to get course ID
-import * as db from "../../Database"; // Importing the database
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment, editAssignment } from "./reducer";
+import React, { useState, useEffect } from 'react';
+import { FaPlus, FaSearch, FaCheckCircle, FaEllipsisV, FaBookOpen, FaTrash } from "react-icons/fa"; 
+import { BsGripVertical } from "react-icons/bs";
+import { useParams, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteAssignment, setAssignments } from './reducer';
+import * as client from "./client";
+import * as coursesClient from "../client";
 
 export default function Assignments() {
-  const { cid } = useParams(); // Retrieve the course ID from the URL params
-  const [assignments, setAssignments] = useState<any[]>(db.assignments);
-  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const { cid } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { assignments } = useSelector((state: any) => state.assignmentReducer);
+  
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
 
-  const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this assignment?")) {
-      dispatch(deleteAssignment(id));
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  const courseAssignments = assignments.filter(
+    (assignment: any) => assignment.course === cid
+  );
+
+  const handleDeleteClick = (assignment: any) => {
+    setAssignmentToDelete(assignment);
+    setShowDeleteDialog(true);
+  };
+
+  const removeAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
+
+  const handleConfirmDelete = async () => {
+    if (assignmentToDelete) {
+      await removeAssignment(assignmentToDelete._id);
+      setShowDeleteDialog(false);
+      setAssignmentToDelete(null);
     }
   };
 
-  // Filter assignments based on the current course ID
-  const filteredAssignments = assignments.filter(
-    (assignment) => assignment.course === cid
-  );
-
   return (
-    <div id="wd-assignments" className="p-3">
-            
-      <ul>
-        {assignments.map((assignment: any) => (
-          <li key={assignment._id}>
-            <span>{assignment.title}</span>
-            <button onClick={() => dispatch(editAssignment(assignment._id))}>
-              Edit
-            </button>
-            <button onClick={() => handleDelete(assignment._id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-      {/* Search bar and action buttons */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <div className="input-group w-50">
-          <input
-            type="text"
-            id="wd-search-assignment"
-            className="form-control"
-            placeholder="Search for Assignments"
-          />
-          <span className="input-group-text">
-            <MdSearch />
-          </span>
+    <div id="wd-assignments" className="container mt-4">
+      <div className="d-flex mb-3">
+        <div className="flex-grow-1 me-2">
+          <div className="input-group w-50">
+            <span className="input-group-text">
+              <FaSearch />
+            </span>
+            <input
+              className="form-control"
+              placeholder="Search..."
+            />
+          </div>
         </div>
-        <div>
-          <button id="wd-add-assignment-group" className="btn btn-secondary me-2">
-            + Group
-          </button>
-          <button onClick={() => navigate("/assignments/new")} id="wd-add-assignment" className="btn btn-success">
-            + Assignment
-          </button>
-        </div>
+        <button className="btn btn-secondary me-2">+ Group</button>
+        <Link to={`/Kanbas/Courses/${cid}/Assignments/new`} className="btn btn-danger">
+          + Assignment
+        </Link>
       </div>
 
-      {/* Assignments Title */}
-      <h3 id="wd-assignments-title">
-        ASSIGNMENTS {filteredAssignments.length > 0 ? `(${filteredAssignments.length} found)` : "No Assignments Found"}
-      </h3>
+      <div className="card bg-light">
+        <div className="card-header d-flex justify-content-between align-items-center py-4">
+          <h5 className="mb-0">
+            <BsGripVertical className="me-2 text-muted" size={25} />
+            ASSIGNMENTS
+          </h5>
+          <div className="position-relative">
+            <span className="badge rounded-pill text-dark px-3 py-2" style={{ border: '2px solid gray', borderRadius: '25px' }}>
+              40% Finished
+            </span>
+            <Link to={`/Kanbas/Courses/${cid}/Assignments/new`} className="btn btn-outline-secondary btn-sm ms-3">
+              <FaPlus />
+            </Link>
+          </div>
+        </div>
 
-      {/* Assignment List */}
-      <ul id="wd-assignment-list" className="list-group">
-        {filteredAssignments.length > 0 ? (
-          filteredAssignments.map((assignment) => (
-            <li key={assignment._id} className="wd-assignment-list-item list-group-item">
-              <a
-                className="wd-assignment-link"
-                href={`#/Kanbas/Courses/${assignment.course}/Assignments/${assignment._id}`}
-              >
-                {assignment.title}
-              </a>
-              <br />
-              Multiple Modules | Not available until {assignment.availableDate || "N/A"} <br />
-              Due {assignment.dueDate || "Not Specified"} | {assignment.points} pts
-            </li>
-          ))
-        ) : (
-          <li className="list-group-item">No assignments found for this course.</li>
-        )}
-      </ul>
+        <ul className="list-group list-group-flush">
+          {courseAssignments.length > 0 ? (
+            courseAssignments.map((assignment: any) => (
+              <li key={assignment._id} className="list-group-item bg-light py-4">
+                <div className="d-flex align-items-center">
+                  <BsGripVertical className="me-2 text-muted" size={25} />
+                  <FaBookOpen className="text-muted me-3" size={25} />
+                  <div className="flex-grow-1">
+                    <div className="mb-1">
+                      <Link
+                        to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                        className="text-decoration-none"
+                      >
+                        <strong>{assignment.title}</strong>
+                      </Link>
+                    </div>
+                    <div>
+                      <span className="text-danger">Multiple Modules</span>
+                      <span className="text-secondary fw-bold"> | Not available until </span>
+                      <span className="text-secondary">{assignment.availableFrom}</span>
+                    </div>
+                    <div className="text-muted">
+                      Due {assignment.dueDate} | {assignment.points} pts
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <FaCheckCircle className="text-success me-3" size={25} />
+                    <button 
+                      className="btn btn-link text-danger me-2"
+                      onClick={() => handleDeleteClick(assignment)}
+                    >
+                      <FaTrash />
+                    </button>
+                    <FaEllipsisV className="text-muted" />
+                  </div>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="list-group-item bg-light py-4">No assignments available for this course.</li>
+          )}
+        </ul>
+      </div>
+      {showDeleteDialog && (
+        <div className="modal d-block" tabIndex={-1} role="dialog" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Delete Assignment</h5>
+                <button type="button" className="btn-close" onClick={() => setShowDeleteDialog(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete "{assignmentToDelete?.title}"?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteDialog(false)}>
+                  Cancel
+                </button>
+                <button type="button" className="btn btn-danger" onClick={handleConfirmDelete}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

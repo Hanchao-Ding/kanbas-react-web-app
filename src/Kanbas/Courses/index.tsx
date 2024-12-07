@@ -6,6 +6,7 @@ import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import PeopleTable from "./People/Table";
+import { useSelector } from "react-redux";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams(); // Get the course ID from the URL

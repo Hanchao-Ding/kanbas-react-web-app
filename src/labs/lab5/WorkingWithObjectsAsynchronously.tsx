@@ -15,15 +15,7 @@ export default function WorkingWithObjectsAsynchronously() {
     fetchAssignment();
   }, []);
 
-  const [todos, setTodos] = useState<any[]>([]);
-  const fetchTodos = async () => {
-    const todos = await client.fetchTodos();
-    setTodos(todos);
-  };
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
+  
   return (
     <div id="wd-asynchronous-objects">
       <h3>Working with Objects Asynchronously</h3>
@@ -45,9 +37,5 @@ export default function WorkingWithObjectsAsynchronously() {
       </button>
       <pre>{JSON.stringify(assignment, null, 2)}</pre>
       <hr />
-
-      
     </div>
-
-    
 );}

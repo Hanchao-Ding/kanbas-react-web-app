@@ -2,8 +2,7 @@ import { MdDoNotDisturbAlt } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { BiImport } from "react-icons/bi";
 import { LiaFileImportSolid } from "react-icons/lia";
-import { AiOutlineShareAlt } from "react-icons/ai"; // Example additional icon
-import { AiOutlineSetting } from "react-icons/ai"; // Example additional icon
+import { AiOutlineHome, AiOutlineCalendar, AiOutlineNotification, AiOutlineBarChart, AiOutlineComment } from "react-icons/ai";
 
 export default function CourseStatus() {
   return (
@@ -11,13 +10,13 @@ export default function CourseStatus() {
       <h2>Course Status</h2>
       <div className="d-flex">
         <div className="w-50 pe-1">
-          <button className="btn btn-lg btn-secondary w-100 text-nowrap">
+          <button className="btn btn-lg btn-secondary w-100 text-nowrap text-center">
             <MdDoNotDisturbAlt className="me-2 fs-5" /> Unpublish
           </button>
         </div>
         <div className="w-50">
           <button className="btn btn-lg btn-success w-100">
-            <FaCheckCircle className="me-2 fs-5" /> Publish
+            <FaCheckCircle className="me-2 fs-5" /> Publish{" "}
           </button>
         </div>
       </div>
@@ -28,11 +27,24 @@ export default function CourseStatus() {
       <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
         <LiaFileImportSolid className="me-2 fs-5" /> Import from Commons
       </button>
-      <button className="btn btn-lg btn-primary w-100 mt-1 text-start">
-        <AiOutlineShareAlt className="me-2 fs-5" /> Share Course
+
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <AiOutlineHome className="me-2 fs-5" /> Choose Home Page
       </button>
       <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <AiOutlineSetting className="me-2 fs-5" /> Course Settings
+        <AiOutlineBarChart className="me-2 fs-5" /> View Course Stream
+      </button>
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <AiOutlineComment className="me-2 fs-5" /> New Announcement
+      </button>
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <AiOutlineBarChart className="me-2 fs-5" /> New Analytics
+      </button>
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <AiOutlineCalendar className="me-2 fs-5" /> View Course Calendar
+      </button>
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <AiOutlineNotification className="me-2 fs-5" /> View Course Notifications
       </button>
     </div>
   );
